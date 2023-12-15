@@ -1,14 +1,17 @@
-FROM ruby:3.0-alpine
+# Base image
+FROM ruby:3.0
 
-RUN apk update && apk add --no-cache build-base nodejs yarn
-
+# Set the working directory 
 WORKDIR /app
 
-COPY Gemfile Gemfile.lock ./
-RUN bundle install 
-
+# Copy the application files to the container
 COPY . .
 
-EXPOSE 8080
+# Install dependencies
+RUN bundle install
 
+# Expose the port on which the application will run
+EXPOSE 4567 
+
+# Start the application
 CMD ["ruby", "main.rb"]
