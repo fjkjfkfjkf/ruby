@@ -1,17 +1,16 @@
-# Base image
-FROM ruby:3.0
-
-# Set the working directory 
-WORKDIR /app
-
-# Copy the application files to the container
+FROM node:latest
+WORKDIR /usr/src/app
+COPY package*.json ./ 
 COPY . .
-
-# Install dependencies
-RUN bundle install
-
-# Expose the port on which the application will run
-EXPOSE 4567 
-
-# Start the application
-CMD ["ruby", "main.rb"]
+# Installing Ruby
+RUN apt update && apt install -y ruby-full
+# Installing Bundler
+RUN gem install bundler 
+RUN yarn install
+# Setup a basic configuration
+RUN cp config/settings.example.yml config/settings.yml
+# Mount config/settings.yml as a volume
+VOLUME /usr/src/app/config/
+# Run the app
+EXPOSE 9293
+CMD yarn start
